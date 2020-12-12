@@ -1,1 +1,5 @@
 /target/
+tgb.log*
+/votes/
+features/ping/ping.so
+
