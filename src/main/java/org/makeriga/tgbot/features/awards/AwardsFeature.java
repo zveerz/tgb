@@ -92,7 +92,7 @@ public class AwardsFeature extends Feature {
             Date awardsDate = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
             Calendar c = Calendar.getInstance();
             c.setTime(awardsDate);
-            c.add(Calendar.HOUR, 4);
+            c.add(Calendar.HOUR, 21);
             awardsDate = c.getTime();
 
             if (!votesDirectory.exists() && !votesDirectory.mkdir()) {
