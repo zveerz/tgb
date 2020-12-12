@@ -27,18 +27,31 @@ public class MembersHelper {
         
         // @Xxx to @xxx and xxx
         for (String realName : doorToMemberMappings.values()) {
-            if (!realName.startsWith("@"))
+            if (!realName.startsWith("@")) {
+                String alt = realName.toLowerCase();
+                memberAlternativeNames.put(alt, realName);
                 continue;
+            }
+            
             String alt = realName.toLowerCase();
-            memberAlternativeNames.put(alt, realName);
-            memberAlternativeNames.put(alt.substring(1), realName);
+            if (!memberAlternativeNames.containsKey(alt))
+                memberAlternativeNames.put(alt, realName);
+            
+            alt = alt.substring(1);
+            if (!memberAlternativeNames.containsKey(alt))
+                memberAlternativeNames.put(alt, realName);
         }
         
         // andis m. => @Aa
         // andis m  => @Aa
         for (String alt : doorToMemberMappings.keySet()) {
-            memberAlternativeNames.put(alt.toLowerCase(), doorToMemberMappings.get(alt));
-            memberAlternativeNames.put(alt.substring(0, alt.length()-1).toLowerCase(), doorToMemberMappings.get(alt));
+            String a = alt.toLowerCase();
+            if (!memberAlternativeNames.containsKey(a))
+                memberAlternativeNames.put(alt.toLowerCase(), doorToMemberMappings.get(alt));
+            
+            a = alt.substring(0, alt.length()-1);
+            if (memberAlternativeNames.containsKey(a.toLowerCase()))
+                memberAlternativeNames.put(alt.substring(0, alt.length()-1).toLowerCase(), doorToMemberMappings.get(alt));
         }
     }
 }
