@@ -27,6 +27,6 @@ public class ArrivalNotification {
         Date arrivalDate = c.getTime();
         c.add(Calendar.MINUTE, stayMinutes);
         Date leaveDate = c.getTime();
-        return String.format("%s announces his/her arrival - will arrive at %s; will stay until %s.", memberName, Settings.DF__TEXT.format(arrivalDate), Settings.DF__TEXT.format(leaveDate)) + (extraMembers > 0 ? " Extra " + extraMembers + " pers. will come." : "");
+        return String.format("%s announces their arrival - will arrive at %s; will stay until %s.", memberName, Settings.DF__TEXT.format(arrivalDate), Settings.DF__TEXT.format(leaveDate)) + (extraMembers > 0 ? " Extra " + extraMembers + " pers. will come." : "");
     }
 }
