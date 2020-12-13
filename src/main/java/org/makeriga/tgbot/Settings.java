@@ -63,7 +63,8 @@ public class Settings {
     
     public static final DateFormat DTF__FILE_NAME = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
     public static final DateFormat DF__FILE_NAME = new SimpleDateFormat("dd-MM-yyyy");
-    public static final DateFormat DF__TEXT = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    public static final DateFormat DTF__TEXT = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    public static final DateFormat TF__TEXT = new SimpleDateFormat("HH:mm");
     
     private String botToken = null;
     private String chatId = null;

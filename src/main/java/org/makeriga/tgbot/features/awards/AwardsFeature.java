@@ -111,7 +111,7 @@ public class AwardsFeature extends Feature {
             }
 
             // log
-            logger.info("Scheduled awards ceremony to: " + Settings.DF__TEXT.format(awardsDate));
+            logger.info("Scheduled awards ceremony to: " + Settings.DTF__TEXT.format(awardsDate));
 
             TimerTask awardsTask = new TimerTask() {
                 @Override

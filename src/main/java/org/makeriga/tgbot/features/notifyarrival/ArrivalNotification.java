@@ -1,7 +1,11 @@
 package org.makeriga.tgbot.features.notifyarrival;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.makeriga.tgbot.Settings;
 
 public class ArrivalNotification {
@@ -27,6 +31,21 @@ public class ArrivalNotification {
         Date arrivalDate = c.getTime();
         c.add(Calendar.MINUTE, stayMinutes);
         Date leaveDate = c.getTime();
-        return String.format("%s announces their arrival - will arrive at %s; will stay until %s.", memberName, Settings.DF__TEXT.format(arrivalDate), Settings.DF__TEXT.format(leaveDate)) + (extraMembers > 0 ? " Extra " + extraMembers + " pers. will come." : "");
+        String announcementPreffixFormat = "%s announces their arrival - ";
+        String extraText = extraMembers > 0 ? " Extra " + extraMembers + " pers. will come." : "";
+        if (sameDates(arrivalDate, leaveDate, referenceDate))
+            return String.format(announcementPreffixFormat + "will stay today from %s to %s.", memberName, Settings.TF__TEXT.format(arrivalDate), Settings.TF__TEXT.format(leaveDate)) + extraText;
+        
+        return String.format(announcementPreffixFormat + "will arrive at %s; will stay until %s.", memberName, Settings.DTF__TEXT.format(arrivalDate), Settings.DTF__TEXT.format(leaveDate)) + extraText;
+    }
+    
+    private boolean sameDates(Date... dates) {
+        if (dates == null)
+            return false;
+        if (dates.length < 2)
+            return false;
+        Set<String> x = new HashSet<>();
+        x.addAll(Arrays.asList(dates).stream().map(i->Settings.DF__FILE_NAME.format(i)).collect(Collectors.toList()));
+        return x.size() == 1;
     }
 }

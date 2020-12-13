@@ -43,7 +43,7 @@ public class CamerasFeature extends Feature {
             }
 
             // send
-            sendPic(chatId, !isPrivateMessage ? messageId : null, requestKey, "./snapcam", String.format("riharda-printeris-%s.jpg", Settings.DTF__FILE_NAME.format(new Date())));
+            sendPic(chatId, !isPrivateMessage ? messageId : null, requestKey, "./3dprinter.sh", String.format("riharda-printeris-%s.jpg", Settings.DTF__FILE_NAME.format(new Date())));
 
             return true;
         }
@@ -54,7 +54,7 @@ public class CamerasFeature extends Feature {
         try {
             ProcessBuilder builder = new ProcessBuilder();
             builder.command(execName);
-            builder.directory(new File(settings.getHomeDirectory()));
+            builder.directory(new File(settings.getHomeDirectory(), "features/cameras"));
             Process process = builder.start();
             int result = process.waitFor();
             if (result != 0)

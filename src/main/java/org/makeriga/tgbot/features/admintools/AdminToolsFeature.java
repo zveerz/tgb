@@ -42,8 +42,8 @@ public class AdminToolsFeature extends Feature {
                 sendMessage(chatId, "None.", null);
                 return true;
             }
-            String line1 = lastMappedArrived != null ? String.format("Mapped user: %s (%s) (%s)", lastMappedArrived.getKey(), getBot().getDoorToMembermappings().get(lastMappedArrived.getKey()), Settings.DF__TEXT.format(new Date(lastMappedArrived.getValue()))) : null;
-            String line2 = lastArrived != null ? String.format("Latest user: %s (%s)", lastArrived.getKey(), Settings.DF__TEXT.format(new Date(lastArrived.getValue()))) : null;
+            String line1 = lastMappedArrived != null ? String.format("Mapped user: %s (%s) (%s)", lastMappedArrived.getKey(), getBot().getDoorToMembermappings().get(lastMappedArrived.getKey()), Settings.DTF__TEXT.format(new Date(lastMappedArrived.getValue()))) : null;
+            String line2 = lastArrived != null ? String.format("Latest user: %s (%s)", lastArrived.getKey(), Settings.DTF__TEXT.format(new Date(lastArrived.getValue()))) : null;
 
             sendMessage(chatId, String.join("\n", Arrays.asList(new String[]{line1, line2}).stream().filter(i->i != null).collect(Collectors.toList())), null);
             return true;

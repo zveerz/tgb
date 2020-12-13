@@ -15,7 +15,9 @@ public class NotifyArrivalFeature extends Feature {
     private static final List<String> ANSWERS__YES = Lists.asList("y", new String[]{"yes", "1", "ja", "jā", "da", "да", "д"});
     private static final List<String> ANSWERS__NO = Lists.asList("n", new String[]{"no", "0", "ne", "nē", "net", "ņet", "нет", "н"});
     private static final List<String> ANSWERS__ABORT = Lists.asList("a", new String[]{"abort", "cancel", "atcelt", "otmena", "отмена", "otmenitj", "otmenit", "отменить"});
-
+    
+    private static final long FORM_EXPIRATION_SECONDS = 120;
+    
     // Edgars hack
     private static final List<String> ANSWERS__THIS_EVENING = Lists.asList("šovakar", new String[]{"sovakar", "shovakar", "this evening", "evening", "večerom", "vecerom", "vecherom", "вечером"});
     private static final int MAGIC_MINUTES = 777;
@@ -25,6 +27,7 @@ public class NotifyArrivalFeature extends Feature {
     private static final String PARDON__Q = "Pardon?";
     
     private final Map<Integer, ArrivalNotification> items = new ConcurrentHashMap<>();
+    private Map<Integer, Long> expireDates = new ConcurrentHashMap<>();
     
     public NotifyArrivalFeature(MakeRigaTgBot bot, Settings settings) {
         super(bot, settings);
@@ -65,6 +68,15 @@ public class NotifyArrivalFeature extends Feature {
         
         if (not.step == ArrivalNotification.STEP__FINISHED)
             return true;
+        
+        // check if expired
+        if (expireDates.containsKey(userId) && expireDates.get(userId) < System.currentTimeMillis()) {
+            removeForm(userId);
+            return false;
+        }
+        
+        // reset expiration
+        expireDates.put(userId, System.currentTimeMillis() + FORM_EXPIRATION_SECONDS * 1000);
         
         do {
             text = text.replaceAll(",", ".").toLowerCase();
@@ -194,6 +206,9 @@ public class NotifyArrivalFeature extends Feature {
         ArrivalNotification not;
         items.put(userId, not = new ArrivalNotification());
         not.memberName = userTitle;
+        
+        // expire date
+        expireDates.put(userId, System.currentTimeMillis() + 60000);
     }
     
     private void removeForm(Integer userId) {
@@ -207,7 +222,9 @@ public class NotifyArrivalFeature extends Feature {
         try {
             items.get(userId).step = ArrivalNotification.STEP__FINISHED;
             items.remove(userId);
+            expireDates.remove(userId);
         } catch (Exception e) {
+        e.toString();
         }
     }
     
