@@ -11,6 +11,7 @@ import org.makeriga.tgbot.MakeRigaTgBot;
 import org.makeriga.tgbot.Settings;
 import org.makeriga.tgbot.features.Feature;
 import org.makeriga.tgbot.features.awards.AwardsFeature;
+import org.makeriga.tgbot.helpers.MembersHelper;
 
 public class AdminToolsFeature extends Feature {
     
@@ -82,8 +83,8 @@ public class AdminToolsFeature extends Feature {
                     break;
                 // send nickname
                 sendMessage(chatId, realName, null);
-                File f = new File(new File(settings.getHomeDirectory(), "icons"), realName + ".webp");
-                if (!f.exists()) 
+                File f = MembersHelper.getIconFile(settings, realName, false);
+                if (f == null) 
                     return true;
                 sendSticker(chatId, null, f);
                 return true;

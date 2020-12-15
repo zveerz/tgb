@@ -1,6 +1,7 @@
 package org.makeriga.tgbot;
 
 import org.apache.log4j.Logger;
+import org.makeriga.tgbot.helpers.MembersHelper;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
@@ -22,7 +23,8 @@ public class Main {
         
         try {
             assert settings.getBotToken() != null && settings.getBotUsername() != null && settings.getChatId() != null && settings.getHomeDirectory() != null;
-            
+            // init helper
+            MembersHelper.init(settings);
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
             telegramBotsApi.registerBot(new MakeRigaTgBot(settings));
 

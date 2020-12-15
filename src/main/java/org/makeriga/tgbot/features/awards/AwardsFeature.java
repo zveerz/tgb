@@ -20,6 +20,7 @@ import org.makeriga.tgbot.MakeRigaTgBot;
 import org.makeriga.tgbot.Settings;
 import org.makeriga.tgbot.features.Feature;
 import org.makeriga.tgbot.features.lovingit.LovingItFeature;
+import org.makeriga.tgbot.helpers.MembersHelper;
 
 public class AwardsFeature extends Feature {
 
@@ -190,11 +191,7 @@ public class AwardsFeature extends Feature {
             sendMessage(chatId, String.format(AWARDS_MESSAGE_FORMAT, winner, winner), null);
 
             // send sticker
-            File icon = new File(iconsDirectory, winner + ".webp");
-            if (!icon.getParent().equals(iconsDirectory.getAbsolutePath()) || !icon.exists()) {
-                icon = lovingItStickerFile;
-            }
-            sendSticker(chatId, null, icon);
+            sendSticker(chatId, null, MembersHelper.getIconFile(settings, winner));
             return winner;
         }
     }

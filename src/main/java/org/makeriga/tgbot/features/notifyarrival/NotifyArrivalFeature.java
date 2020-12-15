@@ -223,9 +223,7 @@ public class NotifyArrivalFeature extends Feature {
             items.get(userId).step = ArrivalNotification.STEP__FINISHED;
             items.remove(userId);
             expireDates.remove(userId);
-        } catch (Exception e) {
-        e.toString();
-        }
+        } catch (Exception e) { }
     }
     
     @Override

@@ -1,8 +1,21 @@
 package org.makeriga.tgbot.helpers;
 
+import java.io.File;
 import java.util.Map;
+import org.makeriga.tgbot.Settings;
 
 public class MembersHelper {
+    
+    private static File stickersDir = null;
+    private static File defaultIcon = null;
+    
+    public static void init(Settings settings) {
+        MembersHelper.stickersDir = new File(settings.getHomeDirectory(), "icons");
+        MembersHelper.defaultIcon = new File(settings.getHomeDirectory(), "stickers/love.webp");
+        assert stickersDir.exists();
+        assert defaultIcon.exists();
+    }
+    
     public static void ParseMembers(Map<String, String> doorToMemberMappings, Map<String, String> memberAlternativeNames) throws Throwable {
         String setting = System.getProperty("users_mappings");
         if (setting == null)
@@ -45,13 +58,48 @@ public class MembersHelper {
         // andis m. => @Aa
         // andis m  => @Aa
         for (String alt : doorToMemberMappings.keySet()) {
+            if ("Reinis V.".equals(alt))
+                System.err.println("");
             String a = alt.toLowerCase();
             if (!memberAlternativeNames.containsKey(a))
-                memberAlternativeNames.put(alt.toLowerCase(), doorToMemberMappings.get(alt));
+                memberAlternativeNames.put(a, doorToMemberMappings.get(alt));
             
-            a = alt.substring(0, alt.length()-1);
-            if (memberAlternativeNames.containsKey(a.toLowerCase()))
-                memberAlternativeNames.put(alt.substring(0, alt.length()-1).toLowerCase(), doorToMemberMappings.get(alt));
+            a = a.substring(0, a.length()-1);
+            if (!memberAlternativeNames.containsKey(a))
+                memberAlternativeNames.put(a, doorToMemberMappings.get(alt));
         }
+    }
+    
+    public static File getIconFile(Settings settings, String memberName) {
+        return getIconFile(settings, memberName, true);
+    }
+    
+    public static File getIconFile(Settings settings, String memberName, boolean returnDefaultIcon) {
+        do {
+            if (memberName == null)
+                break;
+            
+            if (memberName.length() > 70)
+                break;
+            
+            File stickerFile = new File(stickersDir, memberName + ".webp");
+            if (!stickerFile.getParent().equals(stickersDir.getAbsolutePath()))
+                break;
+            
+            if (!stickerFile.exists())
+                break;
+            
+            File altStickerFile = new File(stickersDir, "alt_" + memberName + ".webp");
+            
+            if (!altStickerFile.exists())
+                return stickerFile;
+            
+            return System.currentTimeMillis() % 2 == 0 ? stickerFile : altStickerFile;
+            
+        }
+        while (false);
+        if (returnDefaultIcon)
+            return defaultIcon;
+        return null;
     }
 }
